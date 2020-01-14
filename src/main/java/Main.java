@@ -4,23 +4,34 @@ import java.io.File;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter from: ");
-        String sourceDirectory = scanner.nextLine();
-        System.out.print("Enter to: ");
-        String targetDirectory = scanner.nextLine();
+    static Scanner scanner = new Scanner(System.in);
 
-        File from = new File(sourceDirectory);
-        File to = new File(targetDirectory);
+    public static void main(String[] args) {
         try {
-            if (from.isDirectory()) {
+            for (; ; ) {
+                File from = getDirectoryFile("source");
+                File to = getDirectoryFile("target");
                 FileUtils.copyDirectoryToDirectory(from, to);
-            } else {
-                System.out.println("Enter a valid directory!");
+                System.out.println("Copying successful");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private static File getDirectoryFile(String purpose) {
+        String destination = purpose.equalsIgnoreCase("source") ? "source" : "target";
+        File directoryFile;
+        for (; ; ) {
+            System.out.print("Enter " + destination + " directory: ");
+            String directoryPath = scanner.nextLine();
+            directoryFile = new File(directoryPath);
+            if (directoryFile.exists() && directoryFile.isDirectory()) {
+                return directoryFile;
+            } else {
+                System.out.println("Directory is not valid!");
+                continue;
+            }
         }
     }
 }
